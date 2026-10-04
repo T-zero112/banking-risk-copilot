@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>客户审查 | Banking Risk Copilot</title>
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="/assets/workbench.css" />
+    <script src="/assets/vendor/lucide.js" defer></script>
+    <script src="/assets/workbench.js" defer></script>
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="/"
+        ><span class="brand-mark"><i data-lucide="scan-line"></i></span>Banking
+        Risk Copilot</a
+      >
+      <div class="top-meta">
+        <span id="signed-user"></span>
+        <button id="logout" class="icon-button" title="退出登录" aria-label="退出登录" hidden><i data-lucide="log-out"></i></button>
+        <span class="tag">模拟数据</span
+        ><span id="health" class="connection">连接检查中</span
+        ><a
+          class="icon-button"
+          href="/docs"
+          title="API 文档"
+          aria-label="API 文档"
+          ><i data-lucide="braces"></i
+        ></a>
+      </div>
+    </header>
+    <section id="login-panel" class="login-panel">
+      <h1>登录客户审查</h1>
+      <form id="login-form">
+        <label for="username">用户名</label>
+        <input id="username" autocomplete="username" required maxlength="40" />
+        <label for="password">密码</label>
+        <input id="password" type="password" autocomplete="current-password" required maxlength="256" />
+        <button class="primary" type="submit"><i data-lucide="log-in"></i>登录</button>
+        <p id="login-error" role="alert" hidden></p>
+      </form>
+    </section>
+    <div class="workspace" id="workspace" hidden>
+      <aside class="sidebar">
+        <div class="sidebar-title">
+          <i data-lucide="clipboard-check"></i>
+          <h1>客户审查</h1>
+        </div>
+        <form id="review-form">
+          <label for="customer">客户 ID</label>
+          <input
+            id="customer"
+            name="customer"
+            value="C003"
+            pattern="C[0-9]{3}"
+            maxlength="4"
+            required
+            autocomplete="off"
+            aria-describedby="customer-error"
+          />
+          <p id="customer-error" class="field-error" hidden>
+            客户 ID 格式应为 C003。
+          </p>
+          <fieldset>
+            <legend>审查模式</legend>
+            <div class="segmented">
+              <label
+                ><input
+                  type="radio"
+                  name="mode"
+                  value="deterministic"
+                  checked
+                /><span>固定规则</span></label
+              >
+              <label
+                ><input type="radio" name="mode" value="deepseek" /><span
+                  >DeepSeek</span
+                ></label
+              >
+            </div>
+          </fieldset>
+          <div id="paid-notice" class="paid-notice" hidden>
+            <i data-lucide="cloud-upload"></i>
+            <p>付费调用；模拟客户证据与政策原文将发送至 DeepSeek。</p>
+            <label class="consent"
+              ><input id="consent" type="checkbox" />确认发送并承担 API
+              费用</label
+            >
+          </div>
+          <button id="run" type="submit" class="primary">
+            <i data-lucide="play"></i><span>开始审查</span>
+          </button>
+        </form>
+        <section class="history">
+          <div class="section-line">
+            <h2>本次浏览记录</h2>
+            <button
+              id="clear-history"
+              class="icon-button"
+              title="清空本次浏览记录"
+              aria-label="清空本次浏览记录"
+            >
+              <i data-lucide="list-x"></i>
+            </button>
+          </div>
+          <div id="history-list"><p class="muted">暂无记录</p></div>
+        </section>
+        <form id="lookup-form" class="lookup">
+          <label for="request-lookup">查询审查记录</label>
+          <div class="input-action">
+            <input
+              id="request-lookup"
+              placeholder="请求 ID"
+              required
+              autocomplete="off"
+            /><button
+              id="lookup-button"
+              class="icon-button"
+              title="查询记录"
+              aria-label="查询记录"
+            >
+              <i data-lucide="search"></i>
+            </button>
+          </div>
+        </form>
+        <div class="sidebar-bottom">
+          <i data-lucide="database"></i><span>本机环境 · SPF 政策快照</span>
+        </div>
+      </aside>
+      <main id="main">
+        <div class="page-heading">
+          <div>
+            <p class="eyebrow">AML 客户审查</p>
+            <h2 id="report-title">审查工作台</h2>
+          </div>
+          <div class="report-actions">
+            <button
+              id="copy-request"
+              class="icon-button"
+              title="复制请求 ID"
+              aria-label="复制请求 ID"
+              disabled
+            >
+              <i data-lucide="copy"></i></button
+            ><button
+              id="download"
+              class="icon-button"
+              title="下载审查 JSON"
+              aria-label="下载审查 JSON"
+              disabled
+            >
+              <i data-lucide="download"></i>
+            </button>
+          </div>
+        </div>
+        <div id="notification" role="status" aria-live="polite" hidden></div>
+        <section id="empty" class="empty-state">
+          <i data-lucide="file-search"></i>
+          <h3>尚未载入审查</h3>
+          <p>客户事实、交易证据、政策引用</p>
+          <div class="empty-rule"></div>
+          <span>仅模拟数据，不是洗钱认定或法律建议。</span>
+        </section>
+        <div id="result" hidden>
+          <div class="report-meta">
+            <span id="outcome" class="status-tag"></span
+            ><span id="review-mode"></span><span id="as-of"></span
+            ><span id="duration"></span>
+          </div>
+          <div class="request-line">
+            <span>请求 ID</span><code id="request-id"></code
+            ><span id="audit-label"></span>
+          </div>
+          <div class="tabs" role="tablist" aria-label="审查结果">
+            <button
+              role="tab"
+              id="tab-overview"
+              aria-controls="panel-overview"
+              aria-selected="true"
+              tabindex="0"
+              data-view="overview"
+            >
+              审查概览
+            </button>
+            <button
+              role="tab"
+              id="tab-transactions"
+              aria-controls="panel-transactions"
+              aria-selected="false"
+              tabindex="-1"
+              data-view="transactions"
+            >
+              交易证据
+            </button>
+            <button
+              role="tab"
+              id="tab-policies"
+              aria-controls="panel-policies"
+              aria-selected="false"
+              tabindex="-1"
+              data-view="policies"
+            >
+              政策引用
+            </button>
+            <button
+              role="tab"
+              id="tab-audit"
+              aria-controls="panel-audit"
+              aria-selected="false"
+              tabindex="-1"
+              data-view="audit"
+            >
+              审计记录
+            </button>
+          </div>
+          <section
+            id="panel-overview"
+            class="panel"
+            role="tabpanel"
+            aria-labelledby="tab-overview"
+          ></section>
+          <section
+            id="panel-transactions"
+            class="panel"
+            role="tabpanel"
+            aria-labelledby="tab-transactions"
+            hidden
+          ></section>
+          <section
+            id="panel-policies"
+            class="panel"
+            role="tabpanel"
+            aria-labelledby="tab-policies"
+            hidden
+          ></section>
+          <section
+            id="panel-audit"
+            class="panel"
+            role="tabpanel"
+            aria-labelledby="tab-audit"
+            hidden
+          ></section>
+        </div>
+        <footer>人工判断保留 · 无自动冻结账户或 STR 提交</footer>
+      </main>
+    </div>
+  </body>
+</html>

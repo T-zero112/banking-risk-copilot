@@ -1,0 +1,77 @@
+{
+  "verified_on": "2026-10-01",
+  "documents": [
+    {
+      "source_id": "spf-bank-red-flags",
+      "title": "Red Flag Indicators for Bank",
+      "source": "Singapore Police Force / STRO",
+      "document_type": "red_flag_indicators",
+      "authority": "official_indicators",
+      "jurisdiction": "SG",
+      "format": "pdf",
+      "published_date": null,
+      "document_version": "undated-official-snapshot",
+      "landing_url": "https://www.police.gov.sg/Advisories/Commercial-Crimes/Suspicious-Transaction-Reporting-Office/Suspicious-Transaction-Reporting",
+      "url": "https://www.police.gov.sg/-/media/SPF/Advisories/Bank-Indicators_upd.pdf",
+      "expected_text": ["RED FLAG INDICATORS FOR BANK", "Transactions Which Do Not Make Economic Sense"]
+    },
+    {
+      "source_id": "spf-str-reporting",
+      "title": "Suspicious Transaction Reporting",
+      "source": "Singapore Police Force / STRO",
+      "document_type": "reporting_guidance",
+      "authority": "official_guidance",
+      "jurisdiction": "SG",
+      "format": "html",
+      "published_date": null,
+      "document_version": "page-last-updated-2025-04-26",
+      "landing_url": "https://www.police.gov.sg/Advisories/Commercial-Crimes/Suspicious-Transaction-Reporting-Office/Suspicious-Transaction-Reporting",
+      "url": "https://www.police.gov.sg/Advisories/Commercial-Crimes/Suspicious-Transaction-Reporting-Office/Suspicious-Transaction-Reporting",
+      "selector": "main#mainContent article",
+      "expected_text": ["Reporting Requirements", "Suspicious Transaction Reporting Office"]
+    },
+    {
+      "source_id": "mas-notice-626",
+      "title": "MAS Notice 626 - Prevention of Money Laundering and Countering the Financing of Terrorism - Banks",
+      "source": "Monetary Authority of Singapore",
+      "document_type": "regulatory_notice",
+      "authority": "singapore_banking_notice",
+      "jurisdiction": "SG",
+      "format": "pdf",
+      "published_date": "2024-03-28",
+      "document_version": "revised-2025-06-30",
+      "landing_url": "https://www.mas.gov.sg/regulation/notices/notice-626",
+      "url": "https://www.mas.gov.sg/-/media/amld-amendments---30-june-2025/mas-notice-626.pdf",
+      "expected_text": ["MAS Notice 626", "30 June 2025"]
+    },
+    {
+      "source_id": "mas-guidelines-626",
+      "title": "Guidelines to MAS Notice 626",
+      "source": "Monetary Authority of Singapore",
+      "document_type": "regulatory_guidelines",
+      "authority": "singapore_banking_guidance",
+      "jurisdiction": "SG",
+      "format": "pdf",
+      "published_date": "2024-03-28",
+      "document_version": "pdf-revised-2025-07-01",
+      "landing_url": "https://www.mas.gov.sg/regulation/guidelines/guidelines-to-notice-626-on-prevention-of-money-laundering-and-cft-for-banks",
+      "url": "https://www.mas.gov.sg/-/media/amld-amendments---30-june-2025/guidelines-to-mas-notice-626.pdf",
+      "expected_text": ["MAS NOTICE 626", "1 July 2025"],
+      "version_note": "Official landing page says 30 June 2025; PDF cover says 1 July 2025. Retain both; do not infer equivalence."
+    },
+    {
+      "source_id": "fatf-recommendations",
+      "title": "The FATF Recommendations",
+      "source": "FATF / OECD",
+      "document_type": "international_standard",
+      "authority": "international_standard",
+      "jurisdiction": "international",
+      "format": "pdf",
+      "published_date": null,
+      "document_version": "updated-2026-06",
+      "landing_url": "https://www.fatf-gafi.org/en/publications/Fatfrecommendations/Fatf-recommendations.html",
+      "url": "https://www.fatf-gafi.org/content/dam/fatf-gafi/recommendations/fatf-recommendations-2012.pdf",
+      "expected_text": ["The FATF Recommendations", "Updated June 2026"]
+    }
+  ]
+}

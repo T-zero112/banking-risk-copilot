@@ -1,0 +1,41 @@
+name: banking-risk-copilot
+
+services:
+  db:
+    image: pgvector/pgvector:0.8.6-pg17-trixie
+    environment:
+      POSTGRES_DB: banking_risk
+      POSTGRES_USER: banking_owner
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-banking_local_dev}
+      TZ: Asia/Singapore
+    ports:
+      - "127.0.0.1:${POSTGRES_PORT:-55432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - type: bind
+        source: ./app/sql/extensions.sql
+        target: /docker-entrypoint-initdb.d/00-extensions.sql
+        read_only: true
+        bind:
+          create_host_path: false
+      - type: bind
+        source: ./app/sql/schema.sql
+        target: /docker-entrypoint-initdb.d/01-schema.sql
+        read_only: true
+        bind:
+          create_host_path: false
+      - type: bind
+        source: ./data/synthetic/seed.sql
+        target: /docker-entrypoint-initdb.d/02-seed.sql
+        read_only: true
+        bind:
+          create_host_path: false
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -h 127.0.0.1 -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 5s
+      timeout: 5s
+      retries: 24
+      start_period: 10s
+
+volumes:
+  postgres_data:

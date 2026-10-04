@@ -1,0 +1,52 @@
+[
+  {
+    "id": "rapid-withdrawal",
+    "query": "withdrawn immediately deposited",
+    "source_id": "spf-bank-red-flags",
+    "expected_locator": "PDF page 1",
+    "expected_phrase": "withdrawn immediately after being deposited"
+  },
+  {
+    "id": "matching-inbound-outbound",
+    "query": "matching payments credits",
+    "source_id": "spf-bank-red-flags",
+    "expected_locator": "PDF page 3",
+    "expected_phrase": "Matching of payments out with credits paid in"
+  },
+  {
+    "id": "reporting-requirement",
+    "query": "reasonable grounds suspect",
+    "source_id": "spf-str-reporting",
+    "expected_locator": "Reporting Requirements",
+    "expected_phrase": "reasonable grounds to suspect"
+  },
+  {
+    "id": "filing-platform",
+    "query": "SONAR",
+    "source_id": "spf-str-reporting",
+    "expected_locator": "How to file",
+    "expected_phrase": "SONAR"
+  },
+  {
+    "id": "unrelated-topic",
+    "query": "photosynthesis chlorophyll mitochondria",
+    "expect_empty": true
+  },
+  {
+    "id": "unavailable-source",
+    "query": "customer due diligence",
+    "source_id": "mas-notice-626",
+    "expect_empty": true
+  },
+  {
+    "id": "query-is-not-sql",
+    "query": "report'; DROP TABLE customers; --",
+    "expect_empty": true
+  },
+  {
+    "id": "source-filter-is-not-sql",
+    "query": "suspect",
+    "source_id": "spf-str-reporting' OR 1=1 --",
+    "expect_empty": true
+  }
+]
